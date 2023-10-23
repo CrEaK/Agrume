@@ -632,7 +632,7 @@ extension Agrume: AgrumeCellDelegate {
 
   func dismissAfterFlick() {
     self.willDismiss?()
-    UIView.animate(
+    /*UIView.animate(
       withDuration: .transitionAnimationDuration,
       delay: 0,
       options: .beginFromCurrentState,
@@ -642,7 +642,7 @@ extension Agrume: AgrumeCellDelegate {
         self.overlayView?.alpha = 0
       },
       completion: dismissCompletion
-    )
+    )*/
   }
   
   func dismissAfterTap() {
