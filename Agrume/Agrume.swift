@@ -18,6 +18,7 @@ public final class Agrume: UIViewController {
   private let startIndex: Int
   private let dismissal: Dismissal
   private let enableLiveText: Bool
+  private let presentedAsSwiftUI: Bool
   
   private var overlayView: AgrumeOverlayView?
   private weak var dataSource: AgrumeDataSource?
@@ -70,14 +71,16 @@ public final class Agrume: UIViewController {
     background: Background = .colored(.black),
     dismissal: Dismissal = .withPan(.standard),
     overlayView: AgrumeOverlayView? = nil,
-    enableLiveText: Bool = false
+    enableLiveText: Bool = false,
+    presentedAsSwiftUI: Bool = false
   ) {
     self.init(
       images: [image],
       background: background,
       dismissal: dismissal,
       overlayView: overlayView,
-      enableLiveText: enableLiveText
+      enableLiveText: enableLiveText,
+      presentedAsSwiftUI: presentedAsSwiftUI
     )
   }
 
@@ -94,14 +97,16 @@ public final class Agrume: UIViewController {
     background: Background = .colored(.black),
     dismissal: Dismissal = .withPan(.standard),
     overlayView: AgrumeOverlayView? = nil,
-    enableLiveText: Bool = false
+    enableLiveText: Bool = false,
+    presentedAsSwiftUI: Bool = false
   ) {
     self.init(
       urls: [url],
       background: background,
       dismissal: dismissal,
       overlayView: overlayView,
-      enableLiveText: enableLiveText
+      enableLiveText: enableLiveText,
+      presentedAsSwiftUI: presentedAsSwiftUI
     )
   }
 
@@ -120,7 +125,8 @@ public final class Agrume: UIViewController {
     background: Background = .colored(.black),
     dismissal: Dismissal = .withPan(.standard),
     overlayView: AgrumeOverlayView? = nil,
-    enableLiveText: Bool = false
+    enableLiveText: Bool = false,
+    presentedAsSwiftUI: Bool = false
   ) {
     self.init(
       images: nil,
@@ -129,7 +135,8 @@ public final class Agrume: UIViewController {
       background: background,
       dismissal: dismissal,
       overlayView: overlayView,
-      enableLiveText: enableLiveText
+      enableLiveText: enableLiveText,
+      presentedAsSwiftUI: presentedAsSwiftUI
     )
   }
 
@@ -148,7 +155,8 @@ public final class Agrume: UIViewController {
     background: Background = .colored(.black),
     dismissal: Dismissal = .withPan(.standard),
     overlayView: AgrumeOverlayView? = nil,
-    enableLiveText: Bool = false
+    enableLiveText: Bool = false,
+    presentedAsSwiftUI: Bool = false
   ) {
     self.init(
       images: images,
@@ -157,7 +165,8 @@ public final class Agrume: UIViewController {
       background: background,
       dismissal: dismissal,
       overlayView: overlayView,
-      enableLiveText: enableLiveText
+      enableLiveText: enableLiveText,
+      presentedAsSwiftUI: presentedAsSwiftUI
     )
   }
 
@@ -176,7 +185,8 @@ public final class Agrume: UIViewController {
     background: Background = .colored(.black),
     dismissal: Dismissal = .withPan(.standard),
     overlayView: AgrumeOverlayView? = nil,
-    enableLiveText: Bool = false
+    enableLiveText: Bool = false,
+    presentedAsSwiftUI: Bool = false
   ) {
     self.init(
       images: nil,
@@ -185,7 +195,8 @@ public final class Agrume: UIViewController {
       background: background,
       dismissal: dismissal,
       overlayView: overlayView,
-      enableLiveText: enableLiveText
+      enableLiveText: enableLiveText,
+      presentedAsSwiftUI: presentedAsSwiftUI
     )
   }
 
@@ -197,7 +208,8 @@ public final class Agrume: UIViewController {
     background: Background,
     dismissal: Dismissal,
     overlayView: AgrumeOverlayView? = nil,
-    enableLiveText: Bool = false
+    enableLiveText: Bool = false,
+    presentedAsSwiftUI: Bool = false
   ) {
     switch (images, urls) {
     case (let images?, nil):
@@ -213,6 +225,7 @@ public final class Agrume: UIViewController {
     self.background = background
     self.dismissal = dismissal
     self.enableLiveText = enableLiveText
+    self.presentedAsSwiftUI = presentedAsSwiftUI
     super.init(nibName: nil, bundle: nil)
     
     self.overlayView = overlayView
@@ -632,36 +645,40 @@ extension Agrume: AgrumeCellDelegate {
 
   func dismissAfterFlick() {
     self.willDismiss?()
-    /*UIView.animate(
-      withDuration: .transitionAnimationDuration,
-      delay: 0,
-      options: .beginFromCurrentState,
-      animations: {
-        self.collectionView.alpha = 0
-        self.blurContainerView.alpha = 0
-        self.overlayView?.alpha = 0
-      },
-      completion: dismissCompletion
-    )*/
+      if !presentedAsSwiftUI {
+          UIView.animate(
+            withDuration: .transitionAnimationDuration,
+            delay: 0,
+            options: .beginFromCurrentState,
+            animations: {
+                self.collectionView.alpha = 0
+                self.blurContainerView.alpha = 0
+                self.overlayView?.alpha = 0
+            },
+            completion: dismissCompletion
+          )
+      }
   }
   
   func dismissAfterTap() {
     view.isUserInteractionEnabled = false
 
     self.willDismiss?()
-    UIView.animate(
-      withDuration: .transitionAnimationDuration,
-      delay: 0,
-      options: .beginFromCurrentState,
-      animations: {
-        self.collectionView.alpha = 0
-        self.blurContainerView.alpha = 0
-        self.overlayView?.alpha = 0
-        let scale: CGFloat = .maxScaleForExpandingOffscreen
-        self.collectionView.transform = CGAffineTransform(scaleX: scale, y: scale)
-      },
-      completion: dismissCompletion
-    )
+      if !presentedAsSwiftUI {
+          UIView.animate(
+            withDuration: .transitionAnimationDuration,
+            delay: 0,
+            options: .beginFromCurrentState,
+            animations: {
+                self.collectionView.alpha = 0
+                self.blurContainerView.alpha = 0
+                self.overlayView?.alpha = 0
+                let scale: CGFloat = .maxScaleForExpandingOffscreen
+                self.collectionView.transform = CGAffineTransform(scaleX: scale, y: scale)
+            },
+            completion: dismissCompletion
+          )
+      }
   }
 
   func toggleOverlayVisibility() {

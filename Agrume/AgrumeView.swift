@@ -40,7 +40,7 @@ struct WrapperAgrumeView: UIViewControllerRepresentable {
   }
 
   public func makeUIViewController(context: UIViewControllerRepresentableContext<WrapperAgrumeView>) -> UIViewController {
-    let agrume = Agrume(images: images)
+    let agrume = Agrume(images: images, presentedAsSwiftUI: true)
     agrume.view.backgroundColor = .clear
     agrume.addSubviews()
     agrume.addOverlayView()
