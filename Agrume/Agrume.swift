@@ -611,7 +611,7 @@ extension Agrume: AgrumeCellDelegate {
   }
   
   private func dismissCompletion(_ finished: Bool) {
-    presentingViewController?.dismiss(animated: false) { [unowned self] in
+    presentingViewController?.dismiss(animated: false) { [weak self] in
       self.cleanup()
       self.didDismiss?()
     }
